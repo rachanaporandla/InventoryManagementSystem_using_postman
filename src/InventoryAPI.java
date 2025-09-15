@@ -21,33 +21,33 @@ public class InventoryAPI {
         Gson gson = new Gson();
         HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
         server.createContext("/products", exchange -> {
-            if ("GET".equalsIgnoreCase(exchange.getRequestMethod())) { sendStatus(exchange, 405); return; }
+            if (!"GET".equalsIgnoreCase(exchange.getRequestMethod())) { sendStatus(exchange, 405); return; }
             sendJson(exchange, 200, gson.toJson(productDAO.getAllProducts().values()));
         });
         server.createContext("/addProduct", exchange -> {
-            if ("POST".equalsIgnoreCase(exchange.getRequestMethod())) { sendStatus(exchange, 405); return; }
+            if (!"POST".equalsIgnoreCase(exchange.getRequestMethod())) { sendStatus(exchange, 405); return; }
             Product p = gson.fromJson(readBody(exchange), Product.class);
             boolean ok = (p != null) && productDAO.addProduct(p);
             sendJson(exchange, ok ? 200 : 400, "{\"success\":" + ok + "}");
         });
         server.createContext("/updateProduct", exchange -> {
-            if ("PUT".equalsIgnoreCase(exchange.getRequestMethod())) { sendStatus(exchange, 405); return; }
+            if (!"PUT".equalsIgnoreCase(exchange.getRequestMethod())) { sendStatus(exchange, 405); return; }
             UpdateQuantityRequest req = gson.fromJson(readBody(exchange), UpdateQuantityRequest.class);
             boolean ok = (req != null) && productDAO.updateQuantity(req.productID, req.quantity);
             sendJson(exchange, ok ? 200 : 400, "{\"success\":" + ok + "}");
         });
         server.createContext("/deleteProduct", exchange -> {
-            if ("DELETE".equalsIgnoreCase(exchange.getRequestMethod())) { sendStatus(exchange, 405); return; }
+            if (!"DELETE".equalsIgnoreCase(exchange.getRequestMethod())) { sendStatus(exchange, 405); return; }
             Integer id = getIntQueryParam(exchange, "id");
             boolean ok = (id != null) && productDAO.deleteProduct(id);
             sendJson(exchange, ok ? 200 : 400, "{\"success\":" + ok + "}");
         });
         server.createContext("/suppliers", exchange -> {
-            if ("GET".equalsIgnoreCase(exchange.getRequestMethod())) { sendStatus(exchange, 405); return; }
+            if (!"GET".equalsIgnoreCase(exchange.getRequestMethod())) { sendStatus(exchange, 405); return; }
             sendJson(exchange, 200, gson.toJson(supplierDAO.getAllSuppliers().values()));
         });
         server.createContext("/addSupplier", exchange -> {
-            if ("POST".equalsIgnoreCase(exchange.getRequestMethod())) { sendStatus(exchange, 405); return; }
+            if (!"POST".equalsIgnoreCase(exchange.getRequestMethod())) { sendStatus(exchange, 405); return; }
             Supplier s = gson.fromJson(readBody(exchange), Supplier.class);
             boolean ok = (s != null) && supplierDAO.addSupplier(s);
             sendJson(exchange, ok ? 200 : 400, "{\"success\":" + ok + "}");
